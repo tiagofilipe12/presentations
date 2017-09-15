@@ -421,20 +421,23 @@
 
     ### "Watermilled" INNUca pipeline
 
+    **Disclaimer**: any similarity with reality is pure coincidence
+        ¯\\\_(ツ)_/¯
+
     ```js
     const innuncaDefaultMode = join(
-        unZip,
-        expectedCoverageCalculation,
+        unZip,                          // 1
+        expectedCoverageCalculation,    // 2
         // trueCoverageDetermination in bionode-watermill can be decomposed
         // in two or more tasks, at least one for bowtie2 and another one for
         // samtools
-        trueCoverageDetermination,  // bowtie2 and samtools
-        fastQC,
-        trimmomatic,
-        spades,                     // assembler
-        assemblyCoverageFiltering,  // bowtie2 and samtools
-        pilon,                      // assembly correction
-        MLST2
+        trueCoverageDetermination,      // 3
+        fastQC,                         // 4
+        trimmomatic,                    // 5
+        spades,                         // 6
+        assemblyCoverageFiltering,      // 7
+        pilon,                          // 8
+        MLST2                           // 9
         )
 
     // execute pipeline
@@ -449,23 +452,24 @@
 
     ```js
     const innuncaAlternativeMode = join(
-        unZip,
-        expectedCoverageCalculation,
+        unZip,                          // 1
+        expectedCoverageCalculation,    // 2
         // trueCoverageDetermination in bionode-watermill can be decomposed
         // in two or more tasks, at least one for bowtie2 and another one for
         // samtools
-        trueCoverageDetermination,  // bowtie2 and samtools
-        fastQC,
-        trimmomatic,
+        trueCoverageDetermination,      // 3
+        fastQC,                         // 4
+        trimmomatic,                    // 5
         //****************** notice the re-usage of tasks ******************//
-        expectedCoverageCalculation,
-        trueCoverageDetermination,
-        fastQC
+        expectedCoverageCalculation,    // 2
+        trueCoverageDetermination,      // 3
+        fastQC,                         // 4
+        trimmomatic,                    // 5
         //*************************** now continue *************************//
-        spades,                     // assembler
-        assemblyCoverageFiltering,  // bowtie2 and samtools
-        pilon,                      // assembly correction
-        MLST2
+        spades,                         // 6
+        assemblyCoverageFiltering,      // 7
+        pilon,                          // 8
+        MLST2                           // 9
         )
     ```
 
@@ -496,25 +500,77 @@
 
     # Bionode-watermill
 
-    ### "Watermilled" INNUca pipeline - alternative mode
+    ### I/O
 
-    ```js
-    // execute pipeline
-    innuncaAlternativeMode()
-    ```
-    Details on how to execute optional tasks are provided
-    [here](https://github.com/bionode/GSoC17/blob/5c1e1da0b54f0c0859d06b8f28f4384d7c9937c0/Journal/Week_7.md#optional-tasks).
+    * bionode-watermill will match the input/output glob patterns that are
+        the **last stored match** for a given run of the script being executed
+        (i.e, it will crawl the directory of files to find the first matching
+        file or glob pattern).
 
-    In this case re-usage of tasks is fine because bionode-watermill will
-    match the input/output glob patterns that are the **last stored match**
-        for a given run of the script being executed.
-
-    **Otherwise...**
+        * With other tools, control of input and output can be **very painful**
+        and results will be **harder to reproduce** in different machines and
+        environments.
 
     <div style="text-align: center;">
        <img src="../images/headwall.gif"
-            style="width: 50%; height: auto; position: absolute; right: 10%;
+            style="width: 50%; height: auto; position: absolute; right:25%;
             top: 60%;"/>
+    </div>
+
+    ---
+
+    # Bionode-watermill
+
+    ### But let's go wilder!
+
+    * Download reference genome
+        * Download from NCBI using ftp
+
+    * Download samples
+        * Download sample from SRA
+        * Uncompress SRA
+
+    * Map with two different mappers (`bowtie2` and `bwa`)
+        * Create index for reference genome
+        * Map reads against reference genome
+
+    * Get coverage results for each mapping approach individually
+        * "Bunch" of `samtools` commands that retrieve coverage in the end
+
+    ---
+
+    # Bionode-watermill
+
+    ```js
+    const pipeline = join(
+      // Simultaneously download reference and samples
+      junction(
+        getReference,
+        join(getSamples,fastqDump)
+      ),
+      // prepares inputs for mappers (uncompressing reference) and index for
+      //  samtools
+      samtoolsFaidx, gunzipIt,
+      // runs in parallel both mappers
+      fork(
+        join(indexReferenceBwa, bwaMapper),
+        join(indexReferenceBowtie2, bowtieMapper)
+      ),
+      // here the pipeline will continue splited into two distinct branches,
+      //  one for each mapper.
+      samtoolsView, samtoolsSort, samtoolsIndex, samtoolsDepth
+    )
+    ```
+
+    ---
+
+    # Bionode-watermill
+
+    ### What does this pipeline look like?
+
+    <div style="text-align: center;">
+       <img src="../images/two-mappers_pipeline.png"
+            style="width: 70%; height: auto; position: relative;"/>
     </div>
 
     ---
@@ -576,8 +632,55 @@
 
     ### Main accomplishments
 
-    * Tutorial
-    *
+    * Tutorial.
+
+    * New example pipeline (two-mappers).
+
+    * Logger for redux (for debugging purposes).
+
+    * Graphson-like log file.
+
+    * Directed acyclic graph visualization tool (using d3.js force-directed
+        graph).
+
+    * _Orchestratorception_ - Fixed behavior of nested orchestrators.
+
+    * Tested and documented concurrency, optional tasks and multiple inputs to
+        tasks and pipelines.
+
+    * Updated documentation.
+
+    ---
+
+    # Acknowledgements
+
+    * Google summer of code
+
+    * Open bioinformatics foundation
+
+    * My mentors: Bruno Vieira and Julian Mazzitelli
+
+     <div style="text-align: center;">
+       <img src="../images/vertical_GSoC_logo.jpg" style="width: 20%; height:
+        auto; position: absolute; top: 60%; left: 5%; "/>
+
+       <img src="../images/obf.png" style="width: 15%; height: auto;
+       position: absolute; top: 60%; left: 40%; "/>
+
+       <img src="../images/logo.png" style="width: 15%; height: auto;
+       position: absolute; top: 60%; right: 5%; "/>
+    </div>
+
+
+    <div style="text-align: center;">
+       <img src="../images/logo_imm.png" style="width: 15%; height:
+        auto; position: absolute; top: 5%; right: 10%; "/>
+
+       <img src="../images/ummi1.png" style="width: 10%; height: auto;
+       position: absolute; top: 5%; right: 25%; "/>
+
+    </div>
+
 
 
 
