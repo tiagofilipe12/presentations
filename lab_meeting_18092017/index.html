@@ -26,7 +26,7 @@
     ## Bionode-watermill - A (Not Yet Streaming) Workflow Engine
 
 
-    ####Tiago Jesus
+    #### Tiago Jesus
 
 
     <img style="width: 20%;" src="../images/logo.png"/>
@@ -35,11 +35,551 @@
 
     # Google summer of code
 
-    - What is it?
+    <div style="text-align: center;">
+       <img src="../images/vertical_GSoC_logo.jpg" style="width: 10%; height: auto;
+       position: fixed; right: 5%; "/>
+    </div>
+
+    * #### What is it?
+
+        * Program to enroll students with coding organizations,
+
+        _financed by Google_.
+
+    <div style="text-align: center;">
+       <img src="../images/obf.png" style="width: 10%; height: auto;
+       position: fixed; right: 5%; "/>
+    </div>
+
+
+    * #### Organization
+
+        * Open Bioinformatics Foundation
+
+    <div style="text-align: center;">
+       <img src="../images/logo.png" style="width: 10%; height: auto;
+       position: fixed; right: 5%; "/>
+    </div>
+
+    * #### Community
+
+        * Bionode
+
+    <div style="text-align: center;">
+       <img src="../images/watermill.jpg" style="width: 20%; height: auto;
+       position: fixed; right: 5%; "/>
+    </div>
+
+    * #### Project name
+
+        * Bionode-watermill
 
     ---
 
-    # Introduction
+    # Google summer of code
+
+    * ### Mentors
+
+        <div> <b>Julian Mazzitelli</b> -
+          <a href="https://twitter.com/thejmazz">
+            <img height="20" width=auto title="twitter" alt="twitter logo"
+                 src="../images/twitter.png"/>
+          </a>
+          <a href="https://github.com/thejmazz">
+            <img height="20" width=auto title="github" alt="github logo"
+                 src="../images/github.svg"/>
+          </a>
+        </div>
+
+        * bioinformatics at UofT, @bionode, @biorender, @rareconnect, research student at CCM SickKids. graphics junkie.
+
+        <div style="text-align: right;">
+           <img src="../images/Julian.jpeg" style="width: 20%; height: auto;
+           position: relative;"/>
+        </div>
+
+        <div> <b>Bruno Vieira</b> -
+          <a href="https://twitter.com/bmpvieira">
+            <img height="20" width=auto title="twitter" alt="twitter logo"
+                 src="../images/twitter.png"/>
+          </a>
+          <a href="https://github.com/bmpvieira">
+            <img height="20" width=auto title="github" alt="github logo"
+                 src="../images/github.svg"/>
+          </a>
+        </div>
+
+        * PhD Student at @wurmlab; @mozillascience Fellow; Founder of @bionode
+
+        <div style="text-align: right;">
+           <img src="../images/Bruno.png" style="width: 20%; height: auto;
+           position: relative;"/>
+        </div>
+
+    ---
+
+    # Bionode-watermill
+
+    * Is a workflow engine to manage complex and dynamic pipelines
+
+    ## Wait what? What's a workflow?
+
+    * A workflow is the processing of tasks that comprise a work process
+
+    <div style="text-align: center;">
+       <img src="../images/workflow-diagram-example-ecommerce.png"
+            style="width: 100%; height: auto;"/>
+    </div>
+
+
+    ---
+
+    ## Then... what's a workflow manager?
+
+    * Is a **software** developed for setting-up, performe and monitor a defined
+        sequence of tasks
+
+    ## And... what is a pipeline?
+
+    * Series of transformations applied with **tools** to a **source** to
+        produce a **destination**.
+
+        _Simplest Example:_
+
+    <div style="text-align: center;">
+       <img src="../images/simple_pipepng.png"
+            style="width: 80%; height: auto;"/>
+    </div>
+
+    ---
+
+    # Who is bionode-watermill for?
+
+    ### Biologists
+
+    * Who understand the importance of **replication**.
+
+    ### Programmers
+
+    * Who desire an efficient and easy-to-write methodology for developing
+        **complex** and **dynamic** pipelines
+
+    <div style="text-align: center;">
+       <img src="../images/pipeline_complex.jpg"
+            style="width: 30%; height: auto;"/>
+    </div>
+
+    ---
+
+    # KISS example
+
+    ### Create a file and write something to it
+
+    <div style="text-align: left;">
+       <img src="../images/empty_file.png"
+            style="width: 10%; height: auto; position: relative; left: 15%;""/>
+       <img src="../images/arrow_right.png"
+            style="width: 10%; height: auto; position: relative; left: 35%;"/>
+        <img src="../images/written_file.png"
+             style="width: 15%; height: auto; position: relative; left: 50%;"/>
+    </div>
+
+
+    #### Using shell script
+
+    ```bash
+    touch "test.txt" | echo "some test string" > test.txt
+    ```
+    ##### Execution
+
+    ```bash
+    sh pipeline.sh
+    ```
+
+    ---
+
+    # KISS example
+
+    #### Using shell script
+
+    ```bash
+    touch "test.txt" | echo "some test string" > test.txt
+    ```
+
+    #### Using bionode-watermill
+
+    ```js
+    const {task} = require('bionode-watermill')
+
+    const exampleTask = task({
+        output: '*.txt'
+    }, () => `touch "test.txt" | echo "some test string" > test.txt`
+    )
+
+    // execute the task
+    exampleTask()
+    ```
+
+    ##### Execution
+
+    ```js
+    node pipeline.js
+    ```
+
+    ---
+
+    # KISS example
+
+    ### Right... but that is even more complicated! Why bother?
+
+    * More complexity...
+
+    <div style="text-align: left;">
+       <img src="../images/empty_file.png"
+            style="width: 10%; height: auto; position: relative; left: 5%;""/>
+       <img src="../images/arrow_right.png"
+            style="width: 10%; height: auto; position: relative; left: 15%;"/>
+       <img src="../images/written_file.png"
+            style="width: 15%; height: auto; position: relative; left: 25%;"/>
+    </div>
+    <div style="text-align: left;">
+       <img src="../images/empty_file.png"
+            style="width: 10%; height: auto; position: relative; left: 5%;""/>
+       <img src="../images/arrow_right.png"
+            style="width: 10%; height: auto; position: relative; left: 15%;"/>
+       <img src="../images/written_file.png"
+            style="width: 15%; height: auto; position: relative; left: 25%;"/>
+       <img src="../images/arrow_right.png"
+            style="width: 10%; height: auto; position: absolute; left: 65%;
+            top:50%"/>
+       <img src="../images/written_file.png"
+            style="width: 20%; height: auto; position: absolute; left: 75%;
+            top:43%"/>
+    </div>
+
+    ---
+
+    # KISS example
+
+    ### Shell script
+
+    ```bash
+    # create the two files and write to them
+    touch "test.txt" | echo "some test string" > test.txt
+    touch "test2.txt" | echo "some test string2" > test2.txt
+    # However that test.txt and test2.txt are generated from different
+    # programs and that they store files in different folders
+    PATH_TO_FILE1 = /some/hardcoded/folder
+    PATH_TO_FILE2 = /another/hardcoded/folder
+    # now merge the two files
+    cat ${PATH_TO_FILE1}/test.txt ${PATH_TO_FILE2}/test2.txt > merged.txt
+    # Notice how merged.txt is saved in current working directory
+    ```
+    _Result_
+
+    ```bash
+    # Resulting file
+    some test string
+    some test string2
+    merged.txt (END)
+
+    ```
+
+    ---
+    # KISS example
+
+    ### bionode-watermill
+
+    ```js
+    const {task} = require('bionode-watermill')
+
+    const exampleTask = task({
+        output: '*.txt'
+    }, () => `touch "test.txt" | echo "some test string" > test.txt`
+    )
+
+    const exampleTask2 = task({
+        output: '*.txt'
+    }, () => `touch "test2.txt" | echo "some test string2" > test2.txt`
+    )
+
+    const mergeFiles = task({
+        input: {
+            firstFile: '*t.txt',
+            secondFile: '*2.txt'
+        }
+        output: '*.txt
+    }, ({input}) => `cat ${input.firstFile} ${input.secondFile}  > merged.txt`
+    )
+    ```
+    ---
+
+    # KISS example
+
+    ### bionode-watermill
+    * There are several ways to define inputs (for multiple inputs), this is
+    just the clearer case for demonstration.
+
+    * Pipeline can also be executed in different fashions
+        * _sequentially:_
+    ```js
+    join(exampleTask, exampleTask2, mergeFiles)
+    ```
+        * _simultaneously:_
+    ```js
+    // join is still required in order for mergeFile to be ran after
+    // obtaining both files
+    join(junction(exampleTask, exampleTasks2), mergeFiles)
+    ```
+
+    ---
+
+    # Bionode-watermill
+
+    ### Tasks
+
+    Task is basically a process that executes something (a program, a
+        function, a promise or even a stream) and may have an input
+        and/or output.
+
+    ### Orchestrators
+
+    An orchestrator organizes how tasks will be executed, transforming
+        pipelines from linar pieces of code into something more complex.
+
+    <div style="text-align: center;">
+       <img src="../images/pipeline_complex.jpg"
+            style="width: 20%; height: auto;"/>
+    </div>
+
+    ---
+
+    # Bionode-watermill
+
+    ### Orchestrators
+
+    #### join
+
+    `join` runs a sequence of tasks sequentially. _Example_:
+
+    <div style="text-align: left;">
+       <img src="../images/simple_join.png"
+            style="width: 80%; height: auto; position:absolute; top:30%; "/>
+    </div>
+
+    ---
+
+    # Bionode-watermill
+
+    ### Orchestrators
+
+    #### junction
+
+    `junction` splits the pipeline into two or more branches and waits for the
+        results of all branches to continue the pipeline. _Example_:
+
+    <div style="text-align: left;">
+       <img src="../images/simple_junction.png"
+            style="width: 80%; height: auto; position:absolute; top:30%;
+            left:15%"/>
+    </div>
+    ---
+
+    # Bionode-watermill
+
+    ### Orchestrators
+
+    #### fork
+
+    `fork` splits the pipeline into two or more branches and **does not
+        wait** for the results off all branches to continue the pipeline.
+        _Example_:
+
+    <div style="text-align: left;">
+       <img src="../images/simple_fork.png"
+            style="width: 80%; height: auto; position:absolute; top:30%;
+            left:15%"/>
+    </div>
+
+
+    ---
+
+    # Bionode-watermill
+
+    ### Pratical example?
+    * #### INNUca.py pipeline!
+
+    <div style="text-align: center;">
+       <img src="../images/innuca_pipeline.png"
+            style="width: 50%; height: auto; position: absolute; right: 2%;
+            top:2%;"/>
+    </div>
+
+    ---
+
+    # Bionode-watermill
+
+    ### "Watermilled" INNUca pipeline
+
+    ```js
+    const innuncaDefaultMode = join(
+        unZip,
+        expectedCoverageCalculation,
+        // trueCoverageDetermination in bionode-watermill can be decomposed
+        // in two or more tasks, at least one for bowtie2 and another one for
+        // samtools
+        trueCoverageDetermination,  // bowtie2 and samtools
+        fastQC,
+        trimmomatic,
+        spades,                     // assembler
+        assemblyCoverageFiltering,  // bowtie2 and samtools
+        pilon,                      // assembly correction
+        MLST2
+        )
+
+    // execute pipeline
+    innuncaDefaultMode()
+    ```
+
+    ---
+
+    # Bionode-watermill
+
+    ### "Watermilled" INNUca pipeline - alternative mode
+
+    ```js
+    const innuncaAlternativeMode = join(
+        unZip,
+        expectedCoverageCalculation,
+        // trueCoverageDetermination in bionode-watermill can be decomposed
+        // in two or more tasks, at least one for bowtie2 and another one for
+        // samtools
+        trueCoverageDetermination,  // bowtie2 and samtools
+        fastQC,
+        trimmomatic,
+        //****************** notice the re-usage of tasks ******************//
+        expectedCoverageCalculation,
+        trueCoverageDetermination,
+        fastQC
+        //*************************** now continue *************************//
+        spades,                     // assembler
+        assemblyCoverageFiltering,  // bowtie2 and samtools
+        pilon,                      // assembly correction
+        MLST2
+        )
+    ```
+
+    ---
+
+    # Bionode-watermill
+
+    ### "Watermilled" INNUca pipeline - alternative mode
+
+    ```js
+    // execute pipeline
+    innuncaAlternativeMode()
+    ```
+    Details on how to execute optional tasks are provided
+    [here](https://github.com/bionode/GSoC17/blob/5c1e1da0b54f0c0859d06b8f28f4384d7c9937c0/Journal/Week_7.md#optional-tasks).
+
+    In this case re-usage of tasks is fine because bionode-watermill will
+    match the input/output glob patterns that are the **last stored match**
+        for a given run of the script being executed.
+
+    <div style="text-align: center;">
+       <img src="../images/search4u.gif"
+            style="width: 30%; height: auto; position: absolute; right: 10%;
+            top:60%;"/>
+    </div>
+
+    ---
+
+    # Bionode-watermill
+
+    ### "Watermilled" INNUca pipeline - alternative mode
+
+    ```js
+    // execute pipeline
+    innuncaAlternativeMode()
+    ```
+    Details on how to execute optional tasks are provided
+    [here](https://github.com/bionode/GSoC17/blob/5c1e1da0b54f0c0859d06b8f28f4384d7c9937c0/Journal/Week_7.md#optional-tasks).
+
+    In this case re-usage of tasks is fine because bionode-watermill will
+    match the input/output glob patterns that are the **last stored match**
+        for a given run of the script being executed.
+
+    **Otherwise...**
+
+    <div style="text-align: center;">
+       <img src="../images/headwall.gif"
+            style="width: 50%; height: auto; position: absolute; right: 10%;
+            top: 60%;"/>
+    </div>
+
+    ---
+
+    # Bionode-watermill
+
+    ### Main features
+
+    * Modularity - Recycling tasks
+    <div style="text-align: right;">
+       <img src="../images/lego.gif"
+            style="width: 20%; height: auto; position: absolute; right: 10%;
+            top:30%;"/>
+    </div>
+
+    * Reusability
+
+    * Automated input/output handling
+
+    * Ability to run programs using Unix shell
+
+    * Node.js integration
+
+    * [Streamable Tasks](https://github.com/bionode/bionode-watermill/blob/master/docs/Task.md#streamable-tasks-potential)
+
+    ---
+
+    # Bionode-watermill
+
+    ### Main features
+
+    * Modularity - Recycling tasks
+    <div style="text-align: right;">
+       <img src="../images/lego.gif"
+            style="width: 20%; height: auto; position: absolute; right: 10%;
+            top:30%;"/>
+    </div>
+
+    * Reusability
+
+    * Automated input/output handling
+
+    * Ability to run programs using Unix shell
+
+    * Node.js integration
+
+    * [Streamable Tasks](https://github.com/bionode/bionode-watermill/blob/master/docs/Task.md#streamable-tasks-potential)
+
+    ### Wait! Streams?
+
+    * Streams are collections of data (similar to arrays or strings), but they
+        might not be available all at once. Also, they don't fit in memory.
+        Check [this video](https://youtu.be/p0v_uls8h-0?t=459)
+        if you want to know more on the subject.
+
+    ---
+
+    # Bionode-watermill + GSoC2017
+
+    ### Main accomplishments
+
+    * Tutorial
+    *
+
+
 
     </textarea>
 <script src="./offline_content/remark.min.js">
