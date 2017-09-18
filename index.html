@@ -136,7 +136,7 @@
 
     ## Then... what's a workflow manager?
 
-    * Is a **software** developed for setting-up, performe and monitor a defined
+    * Is a **software** developed for setting-up, perform and monitor a defined
         sequence of tasks
 
     ## And... what is a pipeline?
@@ -158,6 +158,11 @@
     ### Biologists
 
     * Who understand the importance of **replication**.
+
+    <div style="text-align: center;">
+       <img src="images/worksonmymachine.jpg" style="width: 20%; height: auto;
+       position: fixed; right: 5%; top: 10%;"/>
+    </div>
 
     ### Programmers
 
@@ -345,7 +350,7 @@
     ### Orchestrators
 
     An orchestrator organizes how tasks will be executed, transforming
-        pipelines from linar pieces of code into something more complex.
+        pipelines from linear pieces of code into something more complex.
 
     <div style="text-align: center;">
        <img src="images/pipeline_complex.jpg"
@@ -373,6 +378,27 @@
 
     ### Orchestrators
 
+    #### join
+
+    `join` runs a sequence of tasks sequentially. _Example_:
+
+    <div style="text-align: center;">
+       <img src="images/cake.jpg"
+            style="width: 30%; height: auto; position:fixed; top:5%; right:
+            5%;"/>
+    </div>
+
+    <div style="text-align: left;">
+       <img src="images/simple_join_cake.png"
+            style="width: 80%; height: auto; position:absolute; top:30%; "/>
+    </div>
+
+    ---
+
+    # Bionode-watermill
+
+    ### Orchestrators
+
     #### junction
 
     `junction` splits the pipeline into two or more branches and waits for the
@@ -383,6 +409,24 @@
             style="width: 80%; height: auto; position:absolute; top:30%;
             left:15%"/>
     </div>
+
+    ---
+
+    # Bionode-watermill
+
+    ### Orchestrators
+
+    #### junction
+
+    `junction` splits the pipeline into two or more branches and waits for the
+        results of all branches to continue the pipeline. _Example_:
+
+    <div style="text-align: left;">
+       <img src="images/simple_junction_cake.png"
+            style="width: 80%; height: auto; position:absolute; top:30%;
+            left:15%"/>
+    </div>
+
     ---
 
     # Bionode-watermill
@@ -401,6 +445,23 @@
             left:15%"/>
     </div>
 
+    ---
+
+    # Bionode-watermill
+
+    ### Orchestrators
+
+    #### fork
+
+    `fork` splits the pipeline into two or more branches and **does not
+        wait** for the results off all branches to continue the pipeline.
+        _Example_:
+
+    <div style="text-align: left;">
+       <img src="images/simple_fork_cake.png"
+            style="width: 80%; height: auto; position:absolute; top:30%;
+            left:15%"/>
+    </div>
 
     ---
 
